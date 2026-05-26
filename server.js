@@ -7,13 +7,22 @@ app.use(express.json());
 
 app.get('/', (req, res) => {
     res.send(`
+        <!DOCTYPE html>
         <html>
-        <body style="font-family:Arial;max-width:500px;margin:50px auto;padding:20px">
+        <head>
+            <title>Feedback App</title>
+            <style>
+                body { font-family: Arial; max-width: 500px; margin: 50px auto; padding: 20px; }
+                input, textarea { width: 100%; padding: 10px; margin: 10px 0; }
+                button { background: #0078D4; color: white; padding: 10px 20px; border: none; cursor: pointer; }
+            </style>
+        </head>
+        <body>
             <h1>Laissez votre feedback</h1>
             <form method="POST" action="/api/feedback">
-                <input name="email" placeholder="Email" required type="email" style="width:100%;padding:10px;margin:10px 0"/>
-                <textarea name="message" placeholder="Message" required rows="5" style="width:100%;padding:10px;margin:10px 0"></textarea>
-                <button type="submit" style="background:#0078D4;color:white;padding:10px 20px;border:none">Envoyer</button>
+                <input name="email" placeholder="Votre email" required type="email" />
+                <textarea name="message" placeholder="Votre message" required rows="5"></textarea>
+                <button type="submit">Envoyer</button>
             </form>
         </body>
         </html>
@@ -22,8 +31,15 @@ app.get('/', (req, res) => {
 
 app.post('/api/feedback', (req, res) => {
     const { email, message } = req.body;
-    console.log(`Feedback: ${email} - ${message}`);
-    res.send(`<h1>Merci ${email} !</h1><p>Votre message a bien été reçu.</p><a href="/">Retour</a>`);
+    console.log(`Feedback reçu de ${email}: ${message}`);
+    res.send(`
+        <h1>Merci ${email} !</h1>
+        <p>Votre message a bien été reçu.</p>
+        <p><strong>Votre message :</strong> ${message}</p>
+        <a href="/">Retour</a>
+    `);
 });
 
-app.listen(port, () => console.log(`App démarrée sur le port ${port}`));
+app.listen(port, () => {
+    console.log(`Application démarrée sur le port ${port}`);
+});
